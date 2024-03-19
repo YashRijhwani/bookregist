@@ -23,21 +23,8 @@ module.exports = {
         return res.status(500).json({ message: 'Server error' });
     }
   },
-
   
-  // get a single user by either their id or their username
-  async getSingleUser({ user = null, params }, res) {
-    const foundUser = await User.findOne({
-      $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
-    });
-
-    if (!foundUser) {
-      return res.status(400).json({ message: 'Cannot find a user with this id!' });
-    }
-
-    res.json(foundUser);
-  },
-  
+    
   // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
   // {body} is destructured req.body
   async login({ body }, res) {
@@ -53,6 +40,19 @@ module.exports = {
     }
     const token = signToken(user);
     res.json({ token, user });
+  },
+
+  // get a single user by either their id or their username
+  async getSingleUser({ user = null, params }, res) {
+    const foundUser = await User.findOne({
+      $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
+    });
+
+    if (!foundUser) {
+      return res.status(400).json({ message: 'Cannot find a user with this id!' });
+    }
+
+    res.json(foundUser);
   },
 
 

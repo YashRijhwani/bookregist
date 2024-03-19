@@ -4,7 +4,7 @@ const path = require('path');
 const apiRoutes = require('./routes/api/UserRoute');
 
 
-const { connection } = require('./config/connection');
+const { connectWithRetry } = require('./config/connection');
 
 const { readdirSync } = require('fs');
 require('dotenv').config();
@@ -29,12 +29,13 @@ app.use('/api/v1', apiRoutes);
 // Start server
 const startServer = async () => {
     try {
-        await connection(); // Connect to database
+        await connectWithRetry(); // Connect to database
         app.listen(PORT, () => {
             console.log(`🌍 Now listening on port ${PORT}`);
         });
     } catch (error) {
         console.error('Error starting server:', error);
+        process.exit(1); // Exit the process if connection fails
     }
 };
 
