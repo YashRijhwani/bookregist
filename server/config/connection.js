@@ -21,9 +21,9 @@ const connectWithRetry = async () => {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             });
-            console.log('Connected to MongoDB');
+            console.log('Connected to the database. Success!!');
         } catch (error) {
-            console.error('Error connecting to MongoDB:', error);
+            console.error('Error connecting to MongoDB database:', error);
             timeout--;
             await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
         }

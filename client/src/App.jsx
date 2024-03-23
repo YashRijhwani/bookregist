@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+// const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
+const SignInWithGoogle = () => {
+  // Callback function for successful Google
+  const onSuccess = async (response) => {
+    const { tokenId } = response; // Access token received from Google OAuth
+
+    try {
+      // Send the access token to the server
+      const res = await fetch("http://localhost:3000/oauth2callback", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenId}`, // Attach the access token to the request headers
+        },
+      });
+
+      if (res.ok) {
+        // Successfully authenticated with Google Books API
+        console.log("Successfully authenticated with Google Books API !!!");
+      } else {
+        // Handle error
+        console.error("Error:", await res.text());
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // Callback function for failed Google login
+  const onFailure = (error) => {
+    console.error("Google login failed:", error);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <GoogleLogin
+      onSuccess={(credentialResponse) => {
+        console.log(credentialResponse);
+      }}
+      onError={() => {
+        console.log("Login Failed");
+      }}
+    />
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Welcome to My App</h1>
+        <SignInWithGoogle />
+      </header>
+    </div>
+  );
 }
 
-export default App
+export default App;
