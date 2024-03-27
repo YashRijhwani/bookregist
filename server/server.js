@@ -1,13 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();git status
+require('dotenv').config();
 
-const path = require('path');
+// const path = require('path');
 const { OAuth2Client } = require('google-auth-library');
 const UserRoute = require('./routes/api/UserRoute');
 const apiRoute = require('./routes/api/ApiRoute');
-
-const User = require('../server/models/index');
 
 const { connectWithRetry } = require('./config/connection');
 // Retrieve client id and client secret from environment variables
@@ -21,7 +19,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+        // origin: ["https://kalles-frontend.onrender.com", "https://kalles-backed.onrender.com"],
+        origin: ["http://localhost:5173", "http://localhost:3000"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+    })
+);
 
 // Define your Google OAuth2Client
 const oauth2Client = new OAuth2Client(
@@ -50,14 +55,7 @@ app.get('/oauth2callback', async (req, res) => {
         // tokens contains access_token, refresh_token, and expiry_date
 
         // Set credentials for further API calls
-        oauth2Client.setCredentials(tokens);
-        // Store the access token with the user
-        const user = new User({
-            googleAccessToken: tokens.access_token,
-            // other user data...
-        });
-
-        await user.save();
+        oauth2Client.setCredentials(tokens);     
         console.log(tokens);
 
         // Check if the access token is expiring soon
@@ -66,14 +64,18 @@ app.get('/oauth2callback', async (req, res) => {
             oauth2Client.setCredentials(credentials);
         }
 
+        // Return the access token to the client
+        // res.json({ access_token: tokens.access_token });
+
         // Redirect or respond as needed
         res.send('Successfully authenticated with Google Books API !!!');
     } catch (error) {
         console.error('Error retrieving access token:', error);
-        res.status(500).send('Error retrieving access token');
+        res.status(500).send('Error retrieving access token'); 
     }
 });
 
+// https://www.googleapis.com/books/v1/volumes   
 // Routes
 app.use('/api/v1', UserRoute);
 app.use('/api/v1', apiRoute);

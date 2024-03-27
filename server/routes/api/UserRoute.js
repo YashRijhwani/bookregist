@@ -13,15 +13,13 @@ validateBook = async (user, id) => {
   }
 }
 
-router.post('/signup/:mail/:name', async (req, res) => {
+router.post('/signup/:email/:name', async (req, res) => {
   try {
-    const { mail, name } = req.params;
+    const { email, name } = req.params;
 
-    const newUser = new UserModel({ mail, name });
+    const newUser = new UserModel({ email, name });
     await newUser.save();
-    // Generate token for the new user
-    const token = signToken(newUser);
-    res.status(200).json({ token, newUser }); 
+    res.status(200).json({ newUser }); 
 
   } catch (err) {
     console.log(err)
@@ -30,18 +28,17 @@ router.post('/signup/:mail/:name', async (req, res) => {
 });
 
 
-router.get('/login/:mail', async (req, res) => {
+router.get('/login/:email', async (req, res) => {
   try {
-    const { mail } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email } = req.params;
+    const user = await UserModel.findOne({ email });
     
     if (!user) {
       return res.status(404).send("You haven't signed up yet.");
     }
     
-    const token = signToken(user);
-    
-    res.status(200).json({ token, user: { name: user.name, mail: user.mail, homebook: user.homebook } });
+       
+    res.status(200).json({ name: user.name, email: user.email, homebook: user.homebook });
   } catch (err) {
     console.log(err);
     res.status(400).send("Server is having some trouble.");
@@ -50,10 +47,10 @@ router.get('/login/:mail', async (req, res) => {
 
 
 
-router.post('/rename/:mail/:name', async (req, res) => {
+router.post('/rename/:email/:name', async (req, res) => {
   try {
-    const { mail, name } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, name } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       user.name = name;
@@ -67,10 +64,10 @@ router.post('/rename/:mail/:name', async (req, res) => {
 });
 
 
-router.post('/cleardata/:mail', async (req, res) => {
+router.post('/cleardata/:email', async (req, res) => {
   try {
-    const { mail, name } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, name } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       user.books = [];
@@ -84,10 +81,10 @@ router.post('/cleardata/:mail', async (req, res) => {
 });
 
 
-router.post('/sethomebook/:mail/:id', async (req, res) => {
+router.post('/sethomebook/:email/:id', async (req, res) => {
   try {
-    const { mail, id } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       user.homebook = id;
@@ -101,10 +98,10 @@ router.post('/sethomebook/:mail/:id', async (req, res) => {
 });
 
 
-router.post('/removehomebook/:mail', async (req, res) => {
+router.post('/removehomebook/:email', async (req, res) => {
   try {
-    const { mail } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       user.homebook = null;
@@ -118,10 +115,10 @@ router.post('/removehomebook/:mail', async (req, res) => {
 });
 
 
-router.post('/ratebook/:mail/:id/:rating', async (req, res) => {
+router.post('/ratebook/:email/:id/:rating', async (req, res) => {
   try {
-    const { mail, id, rating } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id, rating } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       const index = await validateBook(user, id)
@@ -136,10 +133,10 @@ router.post('/ratebook/:mail/:id/:rating', async (req, res) => {
 });
 
 
-router.post('/updatepage/:mail/:id/:page', async (req, res) => {
+router.post('/updatepage/:email/:id/:page', async (req, res) => {
   try {
-    const { mail, id, page } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id, page } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       const index = await validateBook(user, id)
@@ -154,10 +151,10 @@ router.post('/updatepage/:mail/:id/:page', async (req, res) => {
 });
 
 
-router.post('/updatereview/:mail/:id/:review', async (req, res) => {
+router.post('/updatereview/:email/:id/:review', async (req, res) => {
   try {
-    const { mail, id, review } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id, review } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       const index = await validateBook(user, id)
@@ -172,10 +169,10 @@ router.post('/updatereview/:mail/:id/:review', async (req, res) => {
 });
 
 
-router.post('/updatenotes/:mail/:id/:notes', async (req, res) => {
+router.post('/updatenotes/:email/:id/:notes', async (req, res) => {
   try {
-    const { mail, id, notes } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id, notes } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       const index = await validateBook(user, id)
@@ -191,10 +188,10 @@ router.post('/updatenotes/:mail/:id/:notes', async (req, res) => {
 });
 
 
-router.post('/deletereview/:mail/:id', async (req, res) => {
+router.post('/deletereview/:email/:id', async (req, res) => {
   try {
-    const { mail, id } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       const index = await validateBook(user, id)
@@ -209,10 +206,10 @@ router.post('/deletereview/:mail/:id', async (req, res) => {
 });
 
 
-router.get('/getbook/:mail/:id', async (req, res) => {
+router.get('/getbook/:email/:id', async (req, res) => {
   try {
-    const { mail, id } = req.params;
-    const user = await UserModel.findOne({ mail });
+    const { email, id } = req.params;
+    const user = await UserModel.findOne({ email });
     if (!user) res.status(404).send("No such user");
     else {
       let data = user.books.find(n => n.id == id)
