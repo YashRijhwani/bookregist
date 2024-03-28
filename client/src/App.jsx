@@ -174,7 +174,7 @@ function App() {
   return (
     <div className={`md:min-h-screen bg-gray-100 text-center md:flex-row flex-col`}>
       <div className={`bg-white p-8 rounded shadow-lg`}>
-        <h2 className={`text-2xl font-bold mb-4`}>React Google Login</h2>
+        <h2 className={`text-2xl font-bold mb-4`}>Book Registry & Tracking Management</h2>
 
         <br />
         <br />
