@@ -34,30 +34,39 @@ const oauth2Client = new OAuth2Client(
     CLIENT_SECRET,
     // `http://localhost:3000/oauth2callback`
     `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
-
 );
+
+const scopes = ['https://www.googleapis.com/auth/books'];
 
 // Redirect users to Google OAuth authentication
 app.get('/', (req, res) => {
-    const url = oauth2Client.generateAuthUrl({
+    const authorizationUrl = oauth2Client.generateAuthUrl({
         access_type: 'offline',
-        scope: ['https://www.googleapis.com/auth/books'], // Adjust scopes as needed
+        scope: scopes,
+        // Enable incremental authorization. Recommended as a best practice.
+        include_granted_scopes: true
     });
-    res.redirect(url);
+
+    console.log('Authorization URL:', authorizationUrl); // Log the authorization URL
+    res.redirect(authorizationUrl);
 });
+
 
 // Callback route for handling OAuth response from Google
 app.get('/oauth2callback', async (req, res) => {
-    const { code } = req.query;
 
     try {
-        // Exchange authorization code for access token
+        const { code } = req.query;
+        // Inside your /oauth2callback route
+        console.log("Exchanging code for access token...");
         const { tokens } = await oauth2Client.getToken(code);
+        console.log("Access token obtained:", tokens.access_token);
+
         // Do something with the tokens, like store them for future API calls
         // tokens contains access_token, refresh_token, and expiry_date
 
         // Set credentials for further API calls
-        oauth2Client.setCredentials(tokens);     
+        oauth2Client.setCredentials(tokens);
         console.log(tokens);
 
         // Check if the access token is expiring soon
@@ -73,7 +82,7 @@ app.get('/oauth2callback', async (req, res) => {
         res.send('Successfully authenticated with Google Books API !!!');
     } catch (error) {
         console.error('Error retrieving access token:', error);
-        res.status(500).send('Error retrieving access token'); 
+        res.status(500).send('Error retrieving access token');
     }
 });
 
@@ -89,15 +98,15 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.get('/term-of-use', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/term-of-use.html'));
+    res.sendFile(path.join(__dirname, '../client/term-of-use.html'));
 });
 
 app.get('/privacy-policy', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/privacy-policy.html'));
+    res.sendFile(path.join(__dirname, '../client/privacy-policy.html'));
 });
 
-app.get('*', function(req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, '../client/build')}); 
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, '../client/dist') });
 });
 
 
