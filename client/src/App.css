@@ -1,42 +1,123 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.App {
   text-align: center;
+  /* padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px; */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.icon{
+  /* height: 30px;
+  width: 30px;
+  margin-top: 8px; */
+  margin-left: 15px;
+  transition: 0.2s;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* .icon:hover{
+  opacity: 50%;
+  cursor: pointer;
+} */
+
+.page{
+  margin-top: 60px;
+  /* background-color: beige; */
+  /* overflow-y: hidden; */
+  overflow-x: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.search{
+  /* margin-bottom: 1px; */
+  margin-top: 7px;
+  height: 30px;
+  /* margin-left: 600px; */
 }
 
-.card {
-  padding: 2em;
+.searchicon{
+  margin-top: 10px;
+  transition: 0.2s;
+  margin-right: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.searchicon:hover{
+  margin-top: 10px;
+  opacity: 70%;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.notlogin{
+  padding: auto;
+  height: 200px;
+  margin-top: 310px;
+}
+
+
+.home-main{
+  display: flex;
+  flex-direction: row;
+  align-items:flex-start;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  margin-left: 15px;
+}
+
+.home-play{
+  margin-left: 20px;
+  height: 450px;
+  width: 1080px;
+  display: flex;
+}
+
+.info{
+  margin-left: 50px;
+  margin-top: 30px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 29vw;
+}
+
+.hover{
+  opacity: 1;
+}
+
+.hover:hover{
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+
+.readicon{
+  margin-right: 10px;
+}
+
+.readicon:hover{
+  filter: brightness(40%);
+  transition: 0.2s;
+}
+
+.colors{
+ color: rgb(24, 98, 163);
+ color: rgb(75, 134, 99);
+ color: rgb(156, 50, 50);
+ color:rgb(243, 216, 65);
+ color:rgb(218, 116, 49);
+ color:rgb(250, 249, 246);
+}
+
+#review_edit_button{
+  visibility:hidden;
+}
+
+#review_view:hover #review_edit_button{
+  visibility:visible;
+}
+
+
+.edit_note_button{
+  opacity: 0.95;
+  visibility:hidden;
+}
+
+.note_view:hover .edit_note_button{
+  visibility:visible;
 }

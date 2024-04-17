@@ -9,5 +9,8 @@ export default defineConfig({
       // '/api': 'https://kalles-backend.onrender.com',
       // '/api/v1': 'http://localhost:5173',
     },
+    watch: {
+      usePolling: true,
+    },
   },
 })

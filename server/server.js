@@ -21,8 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     cors({
-        origin: ["https://bookshelf-registry.onrender.com", "https://bookshelf-registry-backend-server.onrender.com"],
-        // origin: ["http://localhost:5173", "http://localhost:3000"],
+        // origin: ["https://bookshelf-registry.onrender.com", "https://bookshelf-registry-backend-server.onrender.com"],
+        origin: ["http://localhost:5173", "http://localhost:3000"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })
@@ -32,8 +32,8 @@ app.use(
 const oauth2Client = new OAuth2Client(
     CLIENT_ID,
     CLIENT_SECRET,
-    // `http://localhost:3000/oauth2callback`
-    `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
+    `http://localhost:3000/oauth2callback`
+    // `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
 );
 
 const scopes = ['https://www.googleapis.com/auth/books'];
