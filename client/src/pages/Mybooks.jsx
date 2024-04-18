@@ -1,42 +1,24 @@
-import '../App.css';
-import { Button, Container } from 'react-bootstrap';
-import Bookdrawer from '../components/Bookdrawer';
-import BookshelfPage from '../components/BookshelfPage';
-import { useSelector, useDispatch } from 'react-redux';
-import { lopen, sopen } from '../actions';
+import React, { useContext } from "react";
+import { Container, Button } from "react-bootstrap";
+import { UserContext } from "../context/UserContext";
 
-const useStyles = (theme) => ({
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-});
+export default function Mybooks() {
+  const { login, signup } = useContext(UserContext);
 
-const Mybooks = () => {
-    const dispatch = useDispatch();
-    const logIn = useSelector(state => state.logIn);
-    const classes = useStyles();
-    return (logIn ? (
-        <div className="page">
-            <div style={{ display: "flex" }} >
-                <Bookdrawer />
-                <main className={classes.content}>
-                    <BookshelfPage />
-                </main>
-            </div>
-        </div>
-    ) : (
-        <div className="notlogin">
-            <Container>
-                <p style={{ textAlign: "center", color: "#37474F", height: "40px", fontSize: "20px" }}>Log in with your Google account, to explore your personal book tracker!</p>
-                <Button style={{ color: "rgb(44, 156, 231)" }} onClick={() => dispatch(lopen())}>Log In</Button>
-                <p style={{ color: "grey" }}>Doesn't have an account?
-                    <Button style={{ marginLeft: '5px', color: "rgb(44, 156, 231)" }} onClick={() => dispatch(sopen())}>Sign Up</Button>
-                </p>
-            </Container>
-        </div>
-    )
-    );
+  return (
+    <Container className="flex flex-col items-center py-10">
+      <p className="text-center text-gray-700 h-40 text-2xl">
+        Log in with your Google account, to explore your personal book tracker!
+      </p>
+      <Button className="text-blue-500 mb-7" onClick={login}>
+        Log In with Google 🚀
+      </Button>
+      <p className="text-gray-500">
+        Doesn't have an account?
+        <Button className="ml-1 text-blue-500" onClick={signup}>
+          Sign Up
+        </Button>
+      </p>
+    </Container>
+  );
 }
-
-export default Mybooks;

@@ -11,9 +11,7 @@ import {
   FaTimes,
   FaBars,
 } from "react-icons/fa";
-import axios from "axios";
 import { useBookshelfContext } from "../context/BookshelfContext";
-
 
 export default function Bookdrawer() {
   const [bookshelves, setBookshelves] = useState([]);
@@ -35,16 +33,15 @@ export default function Bookdrawer() {
   useEffect(() => {
     const fetchData = async (token) => {
       try {
+        // Fetch current shelf data
+        const currentShelfResponse = await addBook(token);
+        const currentShelfData = currentShelfResponse.data;
+        setCurrentShelf(currentShelfData);
+
         // Fetch bookshelves data
         const shelvesResponse = await getMyBooks(token);
         const shelvesData = shelvesResponse.data;
         setBookshelves(shelvesData);
-
-        // Fetch current shelf data
-        const currentShelfResponse = await addBook(token);
-
-        const currentShelfData = currentShelfResponse.data;
-        setCurrentShelf(currentShelfData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -66,11 +63,7 @@ export default function Bookdrawer() {
         direction="left"
         className=""
       >
-        <div
-          className={`w-full flex z-0 bg-white border-r overflow-y`}
-        >
-          <div />
-          <div className={`border-b`} />
+        <div className={`w-full flex z-0 bg-white border-r overflow-y`}>
           <ul className="divide-y">
             <li key={-1}>
               <span className={`block text-black text-lg`}>&nbsp;</span>

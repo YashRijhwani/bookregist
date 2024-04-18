@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
-import { IconContext } from "react-icons"; 
-import Book from "./Book";
+import { IconContext } from "react-icons";
+import Book from "../components/Book";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import ReactPaginate from "react-paginate";
+import { useBookshelfContext } from "../context/BookshelfContext";
 
 export default function BookSearch() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,23 +17,22 @@ export default function BookSearch() {
   const [searching, setSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedBookId, setSelectedBookId] = useState(null);
-
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { handleBookSearch } = useBookshelfContext();
 
   const inputRef = useRef(null);
 
-  const handleSearch = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSearching(true);
 
     try {
-      const response = await axios.get(
-        //  `https://bookshelf-registry-backend-server.onrender.com/api/v1/searchAll/${searchQuery}/${currentPage}`
-        `http://localhost:3000/api/v1/searchAll/${searchQuery}/${currentPage}`
-      );
-      setBooks(response.data.data);
-      setTotalResults(response.data.total);
+      const response = await handleBookSearch(searchQuery, currentPage);
+      setBooks(response.data);
+      setTotalResults(response.total);
     } catch (error) {
       console.error("Error searching for books:", error);
     } finally {
@@ -42,9 +42,8 @@ export default function BookSearch() {
   };
 
   const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage.selected + 1); // Adjust for 0-based index
+    setCurrentPage(selectedPage.selected + 1);
   };
-  
 
   const handleBookClick = (id) => {
     setSelectedBookId(id);
@@ -60,18 +59,26 @@ export default function BookSearch() {
   const totalPages = Math.ceil(totalResults / 12);
 
   useEffect(() => {
+    // Calculate the start and end indices for the current page
+    const startIndex = (currentPage - 1) * 12;
+    const endIndex = Math.min(startIndex + 12, totalResults);
+
+    // Slice the books array to get the books for the current page
+    const booksForPage = books.slice(startIndex, endIndex);
+
+    // Set the filtered books for the current page
+    setFilteredBooks(booksForPage);
+  }, [books, currentPage, totalResults]);
+
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, [searchQuery]); // Add searchQuery as a dependency to re-focus when it changes
 
-  useEffect(() => {
-    console.log("Selected book state changed:", selectedBookId);
-  }, [selectedBookId]);
-
   return (
-    <div className={`flex flex-col items-center justify-center`}>
-      <form onSubmit={handleSearch} className={`mt-20`}>
+    <div className={`flex flex-col md:flex-row items-center justify-center`}>
+      <form onSubmit={handleSubmit} className={``}>
         <input
           ref={inputRef}
           type="text"
@@ -88,7 +95,7 @@ export default function BookSearch() {
           {searching ? <FaSpinner className={`animate-spin`} /> : "Search"}
         </button>
       </form>
-      {loading && <FaSpinner className={`animate-spin mt-4`} size={40} />}
+      {loading && <FaSpinner className={`animate-spin flex justify-center items-center`} size={40} />}
 
       {books ? (
         <div>
@@ -99,7 +106,7 @@ export default function BookSearch() {
             </h2>
           )}
           <div className={`grid grid-cols-2 md:grid-cols-4 gap-4`}>
-            {books.map((book) => (
+            {filteredBooks.map((book) => (
               <div
                 key={book.id}
                 className={`border p-4 rounded cursor-pointer`}
@@ -139,16 +146,16 @@ export default function BookSearch() {
             ))}
           </div>
           <ReactPaginate
-           previousLabel={
-            <IconContext.Provider value={{ color: "#B8C1CC", size: "36px" }}>
-              <AiFillLeftCircle />
-            </IconContext.Provider>
-          }
-          nextLabel={
-            <IconContext.Provider value={{ color: "#B8C1CC", size: "36px" }}>
-              <AiFillRightCircle />
-            </IconContext.Provider>
-          }
+            previousLabel={
+              <IconContext.Provider value={{ color: "#B8C1CC", size: "36px" }}>
+                <AiFillLeftCircle />
+              </IconContext.Provider>
+            }
+            nextLabel={
+              <IconContext.Provider value={{ color: "#B8C1CC", size: "36px" }}>
+                <AiFillRightCircle />
+              </IconContext.Provider>
+            }
             breakLabel={"..."}
             breakClassName={"page-item"}
             pageCount={totalPages}

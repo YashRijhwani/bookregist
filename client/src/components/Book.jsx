@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
+import { useBookshelfContext } from "../context/BookshelfContext";
 
 export default function Book({ id }) {
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { getBookDetail } = useBookshelfContext();
 
   useEffect(() => {
     // console.log("Book ID:", id);
@@ -14,11 +15,8 @@ export default function Book({ id }) {
       setLoading(true);
 
       try {
-        const response = await axios.get(
-          //  `https://bookshelf-registry-backend-server.onrender.com/api/v1/getDetail/${id}`
-          `http://localhost:3000/api/v1/getDetail/${id}`
-        );
-        setBookData(response.data);
+        const response = await getBookDetail(id);
+        setBookData(response);
       } catch (error) {
         console.error("Error fetching book detail:", error);
       } finally {

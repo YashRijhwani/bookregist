@@ -1,18 +1,36 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { Dashboard, Hero } from "./components";
+import React, { useState } from "react";
 import { BookshelfProvider } from "./context/BookshelfContext";
 import { UserProvider } from "./context/UserContext";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import { BookSearch, Home, Mybooks } from "./pages";
 
 function App() {
+  const [activeTab, setActiveTab] = useState(0);
   return (
     <BookshelfProvider>
       <UserProvider>
-        <main>          
-            <Routes>
-              <Route path="/" exact element={<Hero />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>      
+        <main>
+          <Tabs
+            selectedIndex={activeTab}
+            onSelect={(index) => setActiveTab(index)}
+          >
+            <TabList>
+              <Tab>SEARCH</Tab>
+              <Tab>HOME</Tab>
+              <Tab>MY BOOKS</Tab>
+            </TabList>
+
+            <TabPanel>
+              <BookSearch />
+            </TabPanel>
+            <TabPanel>
+              <Home />
+            </TabPanel>
+            <TabPanel>
+              <Mybooks />
+            </TabPanel>
+          </Tabs>
         </main>
       </UserProvider>
     </BookshelfProvider>

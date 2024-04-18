@@ -9,6 +9,32 @@ export const useBookshelfContext = () => useContext(BookshelfContext);
 export const BookshelfProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
+  const handleBookSearch = async (searchQuery, currentPage) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/searchAll/${searchQuery}/${currentPage}`
+        //  `https://bookshelf-registry-backend-server.onrender.com/api/v1/searchAll/${searchQuery}/${currentPage}`
+      );
+      return response.data;
+    } catch (error) {
+      setError(error);
+      throw error;
+    }
+  };
+
+  const getBookDetail = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/getDetail/${id}`
+        // `https://bookshelf-registry-backend-server.onrender.com/api/v1/getDetail/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      setError(error);
+      throw error;
+    }
+  };
+
   const getMyBooks = async (token) => {
     try {
       const response = await axios.get(
@@ -39,6 +65,7 @@ export const BookshelfProvider = ({ children }) => {
     try {
       const response = await axios.post(
         `http://localhost:3000/api/v1/addBook/${shelf}/${volume}/${token}`
+        // `https://bookshelf-registry-backend-server.onrender.com/api/v1/addBook/shelf/volume/token`
       );
       return response.data;
     } catch (error) {
@@ -51,6 +78,7 @@ export const BookshelfProvider = ({ children }) => {
     try {
       await axios.post(
         `http://localhost:3000/api/v1/moveBook/${from}/${to}/${volume}/${token}`
+        // `https://bookshelf-registry-backend-server.onrender.com/api/v1/moveBook/from/to/volume/token`
       );
     } catch (error) {
       setError(error);
@@ -62,6 +90,7 @@ export const BookshelfProvider = ({ children }) => {
     try {
       await axios.post(
         `http://localhost:3000/api/v1/removeBook/${shelf}/${volume}/${token}`
+        // `https://bookshelf-registry-backend-server.onrender.com/api/v1/removeBook/shelf/volume/token`
       );
     } catch (error) {
       setError(error);
@@ -73,6 +102,7 @@ export const BookshelfProvider = ({ children }) => {
     try {
       await axios.post(
         `http://localhost:3000/api/v1/clearShelf/${shelf}/${token}`
+        // `https://bookshelf-registry-backend-server.onrender.com/api/v1/clearShelf/shelf/token`
       );
     } catch (error) {
       setError(error);
@@ -83,6 +113,8 @@ export const BookshelfProvider = ({ children }) => {
   return (
     <BookshelfContext.Provider
       value={{
+        handleBookSearch,
+        getBookDetail,
         getMyBooks,
         getOneBookshelf,
         addBook,
