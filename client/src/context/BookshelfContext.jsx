@@ -67,6 +67,7 @@ export const BookshelfProvider = ({ children }) => {
         `http://localhost:3000/api/v1/addBook/${shelf}/${volume}/${token}`
         // `https://bookshelf-registry-backend-server.onrender.com/api/v1/addBook/shelf/volume/token`
       );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       setError(error);

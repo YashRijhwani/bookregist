@@ -7,8 +7,9 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import ReactPaginate from "react-paginate";
 import { useBookshelfContext } from "../context/BookshelfContext";
+import { AddBook } from "../components";
 
-export default function BookSearch() {
+export default function UserBookSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [books, setBooks] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
@@ -19,7 +20,7 @@ export default function BookSearch() {
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { handleBookSearch } = useBookshelfContext();
+  const { handleBookSearch, getMyBooks } = useBookshelfContext();
 
   const inputRef = useRef(null);
 
@@ -151,7 +152,7 @@ export default function BookSearch() {
                       {book.volumeInfo?.description}
                     </p>
                   )}
-                  {/* <AddBook /> */}
+                  <AddBook />
                 </div>
               ))}
             </div>

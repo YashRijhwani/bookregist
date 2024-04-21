@@ -11,21 +11,11 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Start loading spinner when fetching data
+      setLoading(true);
       try {
         if (user) {
-          // Fetch user profile using the access token obtained from the server
-          const profileResponse = await axios.get(
-            "https://www.googleapis.com/oauth2/v1/userinfo",
-            {
-              headers: {
-                Authorization: `Bearer ${user?.access_token}`,
-                Accept: "application/json",
-              },
-            }
-          );
           // Set profile state
-          setProfile(profileResponse.data);
+          setProfile(user.profile);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -35,30 +25,30 @@ export const UserProvider = ({ children }) => {
     };
 
     fetchData();
-  }, [user, setProfile]);
-
-  const loginUser = async (codeResponse) => {
-    try {
-      console.log("Authorization code received:", codeResponse.code);
-      setUser(codeResponse);
-
-      // Ensure that codeResponse.code is not undefined
-      console.log("Authorization code:", codeResponse?.code);
-
-      // Exchange the received code for an access token on the server
-      const tokenResponse = await axios.get(
-        // `https://bookshelf-registry-backend-server.onrender.com/oauth2callback?code=${codeResponse.code}`
-        `http://localhost:3000/oauth2callback?code=${codeResponse.code}`
-      );
-      console.log("Access Token:", tokenResponse.data.access_token);
-    } catch (error) {
-      console.error("Error exchanging code for access token:", error);
-    }
-  };
+  }, [user]);
 
   const login = useGoogleLogin({
-    onSuccess: loginUser,
-    onError: (error) => console.log("Login Failed:", error),
+    onSuccess: async ({ code }) => {
+      try {
+        // Make a POST request to your server's /oauth2callback endpoint
+        const tokens = await axios.post(
+          `http://localhost:3000/oauth2callback`,
+          // `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
+          {
+            code,
+          }
+        );
+        console.log("Tokens:", tokens.data);
+        // Update user state with the received tokens
+        setUser(tokens.data);
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+    },
+    flow: "auth-code",
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   const logOut = () => {
@@ -67,18 +57,7 @@ export const UserProvider = ({ children }) => {
     setProfile(null);
   };
 
-  const updateUser = async (endpoint, params) => {
-    try {
-      const response = await axios.post(endpoint, params);
-      return response.data;
-    } catch (error) {
-      console.error("Error updating user:", error);
-      throw new Error("Failed to update user.");
-    }
-  };
-
-  // Define endpoint functions
-  const signup = async (email, name) => {
+  const signUp = async (email, name) => {
     try {
       const response = await axios.post(
         `http://localhost:3000/api/v1/signup/${email}/${name}`
@@ -242,10 +221,10 @@ export const UserProvider = ({ children }) => {
         profile,
         setProfile,
         loading,
+        setLoading,
         login,
         logOut,
-        updateUser,
-        signup,
+        signUp,
         loginEndpoint,
         renameUser,
         clearUserData,

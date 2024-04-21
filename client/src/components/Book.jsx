@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useBookshelfContext } from "../context/BookshelfContext";
+import { AddBook } from "../components";
+
 
 export default function Book({ id }) {
   const [bookData, setBookData] = useState(null);
@@ -35,12 +37,12 @@ export default function Book({ id }) {
         </div>
       )}
       {bookData && (
-        <div className={`grid grid-cols-2 gap-4`}>
+        <div className={`grid md:grid-cols-2 gap-4 mx-10 mt-20`}>
           <div className={`col-span-1`}>
             <img
               src={bookData.volumeInfo?.imageLinks?.thumbnail}
               alt={bookData.volumeInfo?.title}
-              className={`h-72 w-full object-contain mx-auto`}
+              className={`h-72 w-full object-contain `}
             />
           </div>
           <div className={`col-span-1`}>
@@ -63,6 +65,7 @@ export default function Book({ id }) {
               See Preview at Google books
             </a>
           </div>
+          <AddBook />
         </div>
       )}
     </div>

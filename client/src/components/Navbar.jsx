@@ -28,7 +28,7 @@ export default function Navbar() {
           {profile ? (
             <>
               <img
-                src={profile.picture}
+                src={profile?.picture}
                 alt={profile.name}
                 className={`w-10 h-10 rounded-full`}
               />

@@ -3,6 +3,7 @@ import { BookshelfProvider } from "./context/BookshelfContext";
 import { UserProvider } from "./context/UserContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import { ToastContainer } from "react-toastify";
 import { BookSearch, Home, Mybooks } from "./pages";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
               <Mybooks />
             </TabPanel>
           </Tabs>
+          <ToastContainer />
         </main>
       </UserProvider>
     </BookshelfProvider>

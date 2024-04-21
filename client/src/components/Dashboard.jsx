@@ -1,13 +1,14 @@
 import React from "react";
-import { Bookdrawer, Navbar } from "../components";
+import { Bookdrawer, Navbar, UserBookSearch } from "../components";
 
 export default function Dashboard({ profile, logOut }) {
-
-
   return (
-    <div className="flex justify-between">
-      <Bookdrawer />      
-      <Navbar profile={profile} logOut={logOut} />
+    <div>
+      <div className="flex justify-between">
+        <Bookdrawer />
+        <Navbar profile={profile} logOut={logOut} />
+      </div>
+      <UserBookSearch />
     </div>
   );
 }

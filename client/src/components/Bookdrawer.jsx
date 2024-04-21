@@ -57,74 +57,78 @@ export default function Bookdrawer() {
       ) : (
         <FaBars onClick={toggleDrawer} className={`cursor-pointer`} size={40} />
       )}
+      {/* <UserBookSearch/> */}
       <Drawer
         open={isOpen}
         onClose={toggleDrawer}
         direction="left"
         className=""
       >
-        <div className={`w-full flex z-0 bg-white border-r overflow-y`}>
-          <ul className="divide-y">
-            <li key={-1}>
-              <span className={`block text-black text-lg`}>&nbsp;</span>
-            </li>
-            <li key={-2}>
-              <span className={`block text-black text-lg`}>&nbsp;</span>
-            </li>
-            {bookshelves.map((shelf, index) => (
-              <li
-                className={`cursor-pointer flex items-center py-2 pl-3`}
-                key={index}
-                onClick={() => handleShelfClick(shelf)}
-              >
-                {shelf.id === 0 && <FaHeart className={`h-5 w-5`} />}
-                {shelf.id === 1 && <FaBook className={`h-5 w-5`} />}
-                {shelf.id === 2 && <FaGraduationCap className={`h-5 w-5`} />}
-                {shelf.id === 3 && <FaCheck className={`h-5 w-5`} />}
-                {shelf.id > 9 && <FaBookmark className={`h-5 w-5`} />}
-                <span
-                  className={`ml-2 ${
-                    currentshelf && currentshelf.id === shelf.id
-                      ? "text-blue-500"
-                      : "text-black"
-                  }`}
-                >
-                  {shelf.title} ({shelf.volumeCount})
-                </span>
+        <aside className={`w-full flex z-0 bg-white border-r overflow-y`}>
+          <div className="pl-3">
+            <p>Library</p>
+            <ul className="">
+              <li key={-1}>
+                <span className={`block text-black text-lg`}>&nbsp;</span>
               </li>
-            ))}
-          </ul>
-          <div className="border-b" />
-          <ul className="divide-y">
-            <li className={`py-2 pl-3`}>
-              <Link
-                onClick={() => setInstructionModal(!instructionModal)}
-                underline="always"
-                className={`text-blue-500 text-sm`}
-              >
-                How can I create bookshelf?
-              </Link>
-            </li>
-            {instructionModal ? (
-              <p className={`pl-3 text-sm`}>
-                Unfortunately, Google book doesn't support creating new
-                bookshelf through its API yet. <br />
-                <br /> However, you can create new bookshelf at{" "}
-                <a
-                  href="https://books.google.com/books"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`text-blue-500`}
+              <li key={-2}>
+                <span className={`block text-black text-lg`}>&nbsp;</span>
+              </li>
+              {bookshelves.map((shelf, index) => (
+                <li
+                  className={`cursor-pointer flex items-center py-2 pl-3`}
+                  key={index}
+                  onClick={() => handleShelfClick(shelf)}
                 >
-                  Google books
-                </a>
-                .{" "}
-              </p>
-            ) : (
-              <div></div>
-            )}
-          </ul>
-        </div>
+                  {shelf.id === 0 && <FaHeart className={`h-5 w-5`} />}
+                  {shelf.id === 1 && <FaBook className={`h-5 w-5`} />}
+                  {shelf.id === 2 && <FaGraduationCap className={`h-5 w-5`} />}
+                  {shelf.id === 3 && <FaCheck className={`h-5 w-5`} />}
+                  {shelf.id > 9 && <FaBookmark className={`h-5 w-5`} />}
+                  <span
+                    className={`ml-2 ${
+                      currentshelf && currentshelf.id === shelf.id
+                        ? "text-blue-500"
+                        : "text-black"
+                    }`}
+                  >
+                    {shelf.title} ({shelf.volumeCount})
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="border-b" />
+            <ul className="divide-y">
+              <li className={`py-2 pl-3`}>
+                <Link
+                  onClick={() => setInstructionModal(!instructionModal)}
+                  underline="always"
+                  className={`text-blue-500 text-sm`}
+                >
+                  How can I create bookshelf?
+                </Link>
+              </li>
+              {instructionModal ? (
+                <p className={`pl-3 text-sm`}>
+                  Unfortunately, Google book doesn't support creating new
+                  bookshelf through its API yet. <br />
+                  <br /> However, you can create new bookshelf at{" "}
+                  <a
+                    href="https://books.google.com/books"
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`text-blue-500`}
+                  >
+                    Google books
+                  </a>
+                  .{" "}
+                </p>
+              ) : (
+                <div></div>
+              )}
+            </ul>
+          </div>
+        </aside>
       </Drawer>
     </>
   );

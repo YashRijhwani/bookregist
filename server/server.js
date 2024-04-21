@@ -28,65 +28,95 @@ app.use(
     })
 );
 
+// const redirectUrl = `http://localhost:3000/oauth2callback`
+// const redirectUrl = `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
+
 // Define your Google OAuth2Client
-const oauth2Client = new OAuth2Client(
+const oAuth2Client = new OAuth2Client(
     CLIENT_ID,
     CLIENT_SECRET,
-    `http://localhost:3000/oauth2callback`
-    // `https://bookshelf-registry-backend-server.onrender.com/oauth2callback`
+    'postmessage',
 );
 
-const scopes = ['https://www.googleapis.com/auth/books'];
+const scopes = ['https://www.googleapis.com/auth/userinfo.profile openid', 'https://www.googleapis.com/auth/books'];
 
 // Redirect users to Google OAuth authentication
 app.get('/', (req, res) => {
-    const authorizationUrl = oauth2Client.generateAuthUrl({
+    const authorizationUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: scopes,
+        prompt: 'consent',
         // Enable incremental authorization. Recommended as a best practice.
         include_granted_scopes: true
     });
 
-    console.log('Authorization URL:', authorizationUrl); // Log the authorization URL
+    // console.log('Authorization URL:', authorizationUrl);
     res.redirect(authorizationUrl);
+    // res.json({ url: authorizationUrl });
 });
+
+
+// Obtain user data using the access token
+const getUserData = async (access_token) => {
+    try {
+        const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        });
+
+        if (response.ok) {
+            const userData = await response.json();
+            console.log("User Data:", userData);
+            return userData;
+        } else {
+            throw new Error('Failed to fetch user data');
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+};
 
 
 // Callback route for handling OAuth response from Google
-app.get('/oauth2callback', async (req, res) => {
+app.post('/oauth2callback', async (req, res) => {
+    const code = req.body.code;
 
     try {
-        const { code } = req.query;
-        // Inside your /oauth2callback route
-        console.log("Exchanging code for access token...");
-        const { tokens } = await oauth2Client.getToken(code);
-        console.log("Access token obtained:", tokens.access_token);
+        // Exchange authorization code for access token
+        const tokenResponse = await oAuth2Client.getToken(code);
+        // console.log("Token Response", tokenResponse.tokens);
 
-        // Do something with the tokens, like store them for future API calls
-        // tokens contains access_token, refresh_token, and expiry_date
+        const accessToken = tokenResponse.tokens.access_token;
+        // console.log("Access Token", accessToken);
 
-        // Set credentials for further API calls
-        oauth2Client.setCredentials(tokens);
-        console.log(tokens);
+        // Set the obtained credentials on the OAuth2 client
+        await oAuth2Client.setCredentials(accessToken);
 
         // Check if the access token is expiring soon
-        if (oauth2Client.isTokenExpiring()) {
-            const { credentials } = await oauth2Client.refreshAccessToken();
-            oauth2Client.setCredentials(credentials);
+        if (oAuth2Client.isTokenExpiring()) {
+            // Refresh the access token
+            const { credentials } = await oAuth2Client.refreshAccessToken();
+            // Set the refreshed credentials on the OAuth2 client
+            oAuth2Client.setCredentials(credentials);
         }
 
-        // Return the access token to the client
-        // res.json({ access_token: tokens.access_token });
+        // Get user data using the refreshed access token
+        const userData = await getUserData(accessToken);
+        // console.log("User Data:", userData);       
 
-        // Redirect or respond as needed
-        res.send('Successfully authenticated with Google Books API !!!');
+
+        // Here you can do something with the user data, such as saving it to a database or returning it in the response
+        res.json(userData);
     } catch (error) {
-        console.error('Error retrieving access token:', error);
-        res.status(500).send('Error retrieving access token');
+        console.error('Error handling OAuth callback:', error);
+        res.status(500).send('Error handling OAuth callback');
     }
 });
 
-// https://www.googleapis.com/books/v1/volumes   
+
+
 // Routes
 app.use('/api/v1', UserRoute);
 app.use('/api/v1', apiRoute);
