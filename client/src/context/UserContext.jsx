@@ -6,26 +6,8 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        if (user) {
-          // Set profile state
-          setProfile(user.profile);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // Stop loading spinner when fetching is done
-      }
-    };
-
-    fetchData();
-  }, [user]);
 
   const login = useGoogleLogin({
     onSuccess: async ({ code }) => {
@@ -38,7 +20,7 @@ export const UserProvider = ({ children }) => {
             code,
           }
         );
-        console.log("Tokens:", tokens.data);
+        // console.log("Tokens:", tokens.data);
         // Update user state with the received tokens
         setUser(tokens.data);
       } catch (error) {
@@ -53,8 +35,7 @@ export const UserProvider = ({ children }) => {
 
   const logOut = () => {
     googleLogout();
-    setUser(null);
-    setProfile(null);
+    setUser(null);    
   };
 
   const signUp = async (email, name) => {
@@ -217,9 +198,7 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
-        setUser,
-        profile,
-        setProfile,
+        setUser,       
         loading,
         setLoading,
         login,

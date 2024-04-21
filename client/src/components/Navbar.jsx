@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
-import { FaBars, FaTimes, FaSpinner } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
-  const { profile, logOut } = useContext(UserContext);
+  const { user, logOut } = useContext(UserContext);
+  // console.log("User:", user);
+
   const navigate = useNavigate();
 
   const toggleMobileNav = () => {
@@ -25,11 +27,11 @@ export default function Navbar() {
             nav ? "block" : "hidden"
           } md:flex`}
         >
-          {profile ? (
+          {user ? (
             <>
               <img
-                src={profile?.picture}
-                alt={profile.name}
+                src={user?.picture}
+                alt={user.name}
                 className={`w-10 h-10 rounded-full`}
               />
 
