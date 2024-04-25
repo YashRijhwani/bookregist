@@ -1,4 +1,4 @@
-# Google Books Search `(MERN Stack Application)`
+# Bookilyx Books Search with Google `(MERN Stack Application)`
 
 Link to [Deployed App](https://bookshelf-registry.onrender.com)
 

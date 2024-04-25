@@ -9,7 +9,7 @@ export default {
     // Gets all books
     getBooks: function () {
         return axios.get(
-            `https://bookshelf-registry-backend-server.onrender.com/api/books`,
+            `https://bookshelf-registry-backend-server.onrender.com/api/books`
             // "http://localhost:3000/api/books"
         );
     },
@@ -17,7 +17,7 @@ export default {
     // Gets the book with the given id
     getBook: function (id) {
         return axios.get(
-            `https://bookshelf-registry-backend-server.onrender.com/api/books/`,
+            `https://bookshelf-registry-backend-server.onrender.com/api/books/`
             // "http://localhost:3000/api/books/"
             + id);
     },
@@ -26,14 +26,14 @@ export default {
     saveBook: function (savedBooks) {
         return axios.post(
             `https://bookshelf-registry-backend-server.onrender.com/api/books/`,
-            // "http://localhost:3000/api/books/"
+            // "http://localhost:3000/api/books/",
             savedBooks);
     },
 
     // Deletes the book with the given id
     deleteBook: function (id) {
         return axios.delete(
-            `https://bookshelf-registry-backend-server.onrender.com/api/books/`,
+            `https://bookshelf-registry-backend-server.onrender.com/api/books/`
             // "http://localhost:3000/api/books/"
              + id);
     }
