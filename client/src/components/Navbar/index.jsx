@@ -145,11 +145,11 @@ const Navbar = () => {
         <ul
           className={`flex flex-col justify-center items-center absolute top-0 left-0 w-full bg-[#3a6183] text-[#f4f4f4] my-20 z-50 md:hidden`}
         >
-          {Auth.loggedIn() && ( 
+          {Auth.loggedIn() && (
             <li>
               <Link
                 to={`/savedbooks`}
-                className={`px-4 cursor-pointer font-medium py-6 hover:bg-black text-center duration-200 my-10`}
+                className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
               >
                 Saved Books
               </Link>
@@ -160,15 +160,23 @@ const Navbar = () => {
               onClick={handleLogout}
               className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
             >
-              Logout
+              LogOut
             </button>
           ) : (
-            <Link
-              to={`/register`}
-              className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
-            >
-              Get Started
-            </Link>
+            <>
+              <Link
+                to={`/register`}
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
+              >
+                Get Started
+              </Link>
+              <Link
+                to={`/login`}
+                className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
+              >
+                LogIn
+              </Link>
+            </>
           )}
         </ul>
       ) : null}
