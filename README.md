@@ -2,7 +2,7 @@
 
 Link to [Deployed App](https://bookshelf-registry.onrender.com)
 
-<img src='client/public/assets/img/screen1.PNG' width='75%'>
+<img src='client/src/assets/images/BookyliX.png' alt="BookyliX" width='75%'>
 
 ---
 
@@ -41,7 +41,7 @@ The application utilizes `react-router-dom` to load React components according t
 
 <sub>
 
-Created by (@[GitHub](https://github.com/samthatcode))
+Created by (@[GitHub/samthatcode](https://github.com/samthatcode))
 for the InterSwitch Cohort Shadowing, Full Stack Coding Bootcamp.
 
 
