@@ -25,7 +25,7 @@ function SearchForm(props) {
   return (
     <>
       <div
-        className={`flex md:flex-row flex-col md:items-center md:justify-center text-center mt-5 `}
+        className={`flex md:flex-row flex-col md:items-center md:justify-center text-center mt-5 mx-auto`}
       >
         <form onSubmit={handleFormSubmit}>
           <input
@@ -41,7 +41,7 @@ function SearchForm(props) {
             className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-24 mt-2`}
             type="submit"
           >
-            {loading ? "Searching..." : "Search"}
+            {loading ? <FaSpinner className={`animate-spin`} /> : "Search"}
           </button>
         </form>
       </div>

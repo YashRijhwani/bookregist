@@ -146,14 +146,12 @@ const Navbar = () => {
           className={`flex flex-col justify-center items-center absolute top-0 left-0 w-full bg-[#3a6183] text-[#f4f4f4] my-20 z-50 md:hidden`}
         >
           {Auth.loggedIn() && (
-            <li>
-              <Link
-                to={`/savedbooks`}
-                className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
-              >
-                Saved Books
-              </Link>
-            </li>
+            <Link
+              to={`/savedbooks`}
+              className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5`}
+            >
+              Saved Books
+            </Link>
           )}
           {Auth.loggedIn() ? ( // Check if the user is logged in
             <button
