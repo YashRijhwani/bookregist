@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import bookImage from "../../assets/images/bookTracker_img.png";
 import Auth from "../../utils/auth";
 
@@ -8,7 +8,7 @@ const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
 
   const navigate = useNavigate();
 
@@ -48,19 +48,10 @@ const Navbar = () => {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    // Fetch user information when the component mounts
-    const fetchUserInfo = async () => {
-      try {
-        const user = await Auth.getProfile();
-        setUserInfo(user);
-      } catch (error) {
-        console.error("Error fetching user information:", error);
-      }
-    };
-
-    if (Auth.loggedIn()) {
-      fetchUserInfo();
-    }
+    // Retrieve user profile information when the component mounts
+    const profile = Auth.getProfile();
+    console.log("User Profile:", profile);
+    setUserProfile(profile.data);
   }, []);
 
   return (
@@ -85,11 +76,9 @@ const Navbar = () => {
       <ul
         className={`space-x-16 hidden md:flex md:justify-between items-center`}
       >
-        {Auth.getProfile() && (
+        {Auth.loggedIn() && userProfile && (
           <li>
-            <p className="text-white">
-              {userInfo?.username || userInfo?.email}
-            </p>
+            <p className="text-white">Hello {userProfile?.username}</p>
           </li>
         )}
         {Auth.loggedIn() && ( // Check if the user is logged in
@@ -102,6 +91,7 @@ const Navbar = () => {
             </Link>
           </li>
         )}
+
         <Link
           to={`/`}
           className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
@@ -114,6 +104,14 @@ const Navbar = () => {
         >
           Contact
         </Link>
+        {Auth.loggedIn() && (
+          <Link
+            to={`/search`}
+            className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+          >
+            <FaSearch />
+          </Link>
+        )}
         {Auth.loggedIn() ? ( // Check if the user is logged in
           <button
             onClick={handleLogout}
@@ -145,6 +143,11 @@ const Navbar = () => {
         <ul
           className={`flex flex-col justify-center items-center absolute top-0 left-0 w-full bg-[#3a6183] text-[#f4f4f4] my-20 z-50 md:hidden`}
         >
+          {Auth.loggedIn() && userProfile && (
+            <li>
+              <p className="text-white">Hello {userProfile?.username}</p>
+            </li>
+          )}
           {Auth.loggedIn() && (
             <Link
               to={`/savedbooks`}
@@ -153,6 +156,15 @@ const Navbar = () => {
               Saved Books
             </Link>
           )}
+          {Auth.loggedIn() && (
+            <Link
+              to={`/search`}
+              className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5`}
+            >
+              <FaSearch />
+            </Link>
+          )}
+
           {Auth.loggedIn() ? ( // Check if the user is logged in
             <button
               onClick={handleLogout}

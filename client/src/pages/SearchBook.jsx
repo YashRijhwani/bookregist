@@ -61,6 +61,12 @@ class Search extends Component {
       return;
     }
 
+    // Check if the bookID already exists in savedBookIds
+    if (this.state.savedBookIds.includes(bookID)) {
+      toast.warn("You've already saved that book.", { autoClose: 500 });
+      return;
+    }
+
     const newBook = {
       title: targetBook.volumeInfo.title,
       authors: targetBook.volumeInfo.authors,
@@ -69,17 +75,10 @@ class Search extends Component {
       link: targetBook.volumeInfo.infoLink,
     };
 
-    // Check if the bookID already exists in savedBookIds
-    if (this.state.savedBookIds.includes(bookID)) {
-      toast.warn("You've already saved that book.", { autoClose: 500 });
-      return;
-    }
-
     API.saveBook(newBook)
       .then((res) => {
-        const newBookId = res.data._id; // Access the ID of the newly saved book
-        // Update savedBookIds in the state
-        const updatedSavedBookIds = [...this.state.savedBookIds, newBookId];
+        // Update savedBookIds in the state with the bookID from the search results
+        const updatedSavedBookIds = [...this.state.savedBookIds, bookID];
         this.setState({ savedBookIds: updatedSavedBookIds });
         saveBookIds(updatedSavedBookIds); // Save updated book IDs to local storage
         toast.success("Book saved successfully!", { autoClose: 500 });
