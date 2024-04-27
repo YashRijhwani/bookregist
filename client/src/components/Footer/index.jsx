@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer
-      className={`flex flex-col md:flex-row md:justify-around md:items-center bg-slate-200`}
+      className={`flex flex-col md:flex-row md:justify-around md:items-center bg-slate-200 mt-10 p-3`}
     >
       <Link to={"/"} className={`font-bold text-lg text-center`}>
         Bookilyx

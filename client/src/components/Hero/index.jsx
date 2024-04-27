@@ -2,6 +2,8 @@ import React from "react";
 import Home from "../../pages/Home";
 import { Link } from "react-router-dom";
 import Layout from "../Layout";
+import Blog from "../Blog";
+import Contact from "../Contact";
 
 const Hero = () => {
   return (
@@ -29,6 +31,9 @@ const Hero = () => {
           </Link>
         </div>
       </div>
+
+      <Blog />
+      <Contact />
     </Layout>
   );
 };

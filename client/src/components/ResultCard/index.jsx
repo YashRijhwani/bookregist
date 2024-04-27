@@ -13,9 +13,10 @@ function ResultCard({
 }) {
   return (
     <div
-      className={`text-center sm:flex sm:justify-center sm:items-center my-10 container`}
+      className={`text-center sm:flex sm:justify-center sm:items-center my-10 md:mx-7 mx-4`}
+      style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)" }}
     >
-      <div className={`sm:w-3/4 lg:w-2/3`}>
+      <div className={`p-5`}>
         <div className={`mb-4`}>
           <h4 className={`text-gray-800`}>{title}</h4>
           <span className={`mt-2`}>Written By: </span>
@@ -25,7 +26,7 @@ function ResultCard({
           </small>
         </div>
 
-        <div className={`flex flex-col justify-between gap-20 md:flex-row`}>
+        <div className={`flex flex-col justify-between gap-8 md:flex-row`}>
           <div className={`w-full md:w-2/4 text-center flex justify-center`}>
             <img src={image} alt={title} className={`max-w-full`} />
           </div>
@@ -49,7 +50,7 @@ function ResultCard({
             </Button>
           )}
         </div>
-        <hr className={`mb-4 font-bold text-black`} />
+       
       </div>
     </div>
   );

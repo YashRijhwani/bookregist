@@ -26,13 +26,7 @@ app.use(
 app.use('/api', BookRoute);
 app.use('/api', UserRoute);
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../client/dist/index.html')));
 
-// Send every other request to the React app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
