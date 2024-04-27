@@ -115,7 +115,7 @@ const Login = () => {
         <button
           disabled={isLoading || !(userFormData.email && userFormData.password)}
           type={`submit`}
-          className={`w-full bg-gray-500 cursor-pointer text-white rounded-md py-2 px-4 hover:bg-gray-700 font-bold`}
+          className={`w-full bg-orange-500 cursor-pointer text-white rounded-md py-2 px-4 hover:bg-orange-600 font-bold`}
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>

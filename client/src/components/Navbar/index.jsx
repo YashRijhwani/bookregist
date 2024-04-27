@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import bookImage from "../../assets/images/bookTracker_img.png";
 import Auth from "../../utils/auth";
-import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
 
@@ -40,6 +40,20 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", useScrollPosition);
 
+    const fetchUsername = async () => {
+      try {
+        const profile = await Auth.getProfile();
+        if (profile) {
+          // console.log("Profile", profile);
+          setUsername(profile.data.username);
+        }
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    };
+
+    fetchUsername();
+
     return () => {
       // Clean up the event listener
       window.removeEventListener("resize", handleResize);
@@ -58,8 +72,6 @@ const Navbar = () => {
       });
     }
   };
-
-
 
   return (
     <div
@@ -82,31 +94,29 @@ const Navbar = () => {
       {/* Desktop View */}
       <ul
         className={`space-x-16 hidden md:flex md:justify-between items-center`}
-      >        
+      >
         {Auth.loggedIn() && ( // Check if the user is logged in
-          <li>
-            <Link
-              to={`/savedbooks`}
-              className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
-            >
-              Saved Books
-            </Link>
-          </li>
+          <>
+            {username && (
+              <p className={`flex justify-center items-center gap-2`}>
+                <span className={`text-white`}>Welcome!</span>{" "}
+                <span
+                  className={`text-orange-500 bg-orange-100 text-xs font-semibold px-2 py-1 rounded border`}
+                >
+                  {username}
+                </span>
+              </p>
+            )}
+            <li>
+              <Link
+                to={`/savedbooks`}
+                className={`px-4 flex justify-center items-center cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+              >
+                Saved Books
+              </Link>
+            </li>
+          </>
         )}
-        <li
-          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
-        >
-          <a href="#blog" onClick={handleClick("blog")}>
-            Blog
-          </a>
-        </li>
-        <li
-          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
-        >
-          <a href="#contact" onClick={handleClick("contact")}>
-            Contact
-          </a>
-        </li>
 
         {Auth.loggedIn() && (
           <Link
@@ -117,19 +127,37 @@ const Navbar = () => {
           </Link>
         )}
         {Auth.loggedIn() ? ( // Check if the user is logged in
-          <button
-            onClick={handleLogout}
-            className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
-          >
-            Logout
-          </button>
+          <>
+            <button
+              onClick={handleLogout}
+              className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            >
+              Logout
+            </button>
+          </>
         ) : (
-          <Link
-            to={`/login`}
-            className={`bg-white hover:bg-gray-200 text-black  font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline`}
-          >
-            LogIn
-          </Link>
+          <>
+            <li
+              className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+            >
+              <a href="#blog" onClick={handleClick("blog")}>
+                Blog
+              </a>
+            </li>
+            <li
+              className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+            >
+              <a href="#contact" onClick={handleClick("contact")}>
+                Contact
+              </a>
+            </li>
+            <Link
+              to={`/login`}
+              className={`bg-white hover:bg-gray-200 text-black  font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline`}
+            >
+              LogIn
+            </Link>
+          </>
         )}
       </ul>
 
@@ -146,7 +174,7 @@ const Navbar = () => {
       {nav ? (
         <ul
           className={`flex flex-col justify-center items-center absolute top-0 left-0 w-full bg-[#3a6183] text-[#f4f4f4] my-20 z-50 md:hidden`}
-        >         
+        >
           {Auth.loggedIn() && (
             <Link
               to={`/savedbooks`}
@@ -165,12 +193,24 @@ const Navbar = () => {
           )}
 
           {Auth.loggedIn() ? ( // Check if the user is logged in
-            <button
-              onClick={handleLogout}
-              className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
-            >
-              LogOut
-            </button>
+            <>
+              <button
+                onClick={handleLogout}
+                className={`bg-white hover:bg-gray-200 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
+              >
+                LogOut
+              </button>
+              {username && (
+                <p className={`flex justify-center items-center gap-2 mb-4`}>
+                  <span className={`text-white`}>Welcome!</span>{" "}
+                  <span
+                    className={`text-orange-500 bg-orange-100 text-xs font-semibold px-2 py-1 rounded border`}
+                  >
+                    {username}
+                  </span>
+                </p>
+              )}
+            </>
           ) : (
             <>
               <li
