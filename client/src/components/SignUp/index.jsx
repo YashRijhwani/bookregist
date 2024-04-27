@@ -61,17 +61,23 @@ const SignUp = () => {
         toast.error("Something went wrong!");
         return;
       }
-      const { token, user } = response.data;
-      // console.log(user);
-      Auth.login(token);
+      const { token, user } = await response.data;
       toast.success("Sign up successful. Redirecting...", {
         autoClose: 2000,
       });
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-    } catch (err) {
-      console.error(err);
+      
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // If the error response status is 400 (Bad Request),
+        // it means the email is already in use
+        toast.error("Email is already in use. Please use a different email.");
+      } else {
+        // Handle other types of errors if needed
+        toast.error("Failed to create user. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }

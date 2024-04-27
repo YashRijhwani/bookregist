@@ -17,8 +17,16 @@ module.exports = {
 
         res.json(foundUser);
     },
+
     // create a user, sign a token, and send it back (to client/src/components/SignUp)
     async createUser({ body }, res) {
+        // Check if the user's email already exists
+        const existingUser = await User.findOne({ email: body.email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email is already in use!' });
+        }
+
+        // Create a new user if the email doesn't exist
         const user = await User.create(body);
 
         if (!user) {
@@ -27,6 +35,7 @@ module.exports = {
         const token = signToken(user);
         res.json({ token, user });
     },
+
     // login a user, sign a token, and send it back (to client/src/components/Login)
     // {body} is destructured req.body
     async login({ body }, res) {
@@ -38,7 +47,7 @@ module.exports = {
         const correctPw = await user.isCorrectPassword(body.password);
 
         if (!correctPw) {
-            return res.status(400).json({ message: 'Wrong password!' });
+            return res.status(400).json({ message: 'Wrong email or password!' });
         }
         const token = signToken(user);
         res.json({ token, user });
@@ -64,6 +73,7 @@ module.exports = {
             res.status(500).json({ message: 'Failed to save inquiry message to the database. Please try again.' });
         }
     },
+
     // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
     // user comes from `req.user` created in the auth middleware function
     async saveBook({ user, body }, res) {

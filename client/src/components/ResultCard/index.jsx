@@ -13,7 +13,7 @@ function ResultCard({
 }) {
   return (
     <div
-      className={`text-center sm:flex sm:justify-center sm:items-center my-10 md:mx-7 mx-4`}
+      className={`text-center sm:flex sm:justify-center sm:items-center my-14 md:mx-40 mx-4`}
       style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)" }}
     >
       <div className={`p-5`}>
@@ -31,13 +31,16 @@ function ResultCard({
             <img src={image} alt={title} className={`max-w-full`} />
           </div>
 
-          <div className={`w-full md:w-2/4 p-5 overflow-y-auto text-center`} style={{ maxHeight: "300px" }}>
+          <div
+            className={`w-full md:w-2/4 p-5 overflow-y-auto text-center`}
+            style={{ maxHeight: "300px" }}
+          >
             <p className={`font-bold`}>Description: </p>
             <p className={`text-center `}>{description}</p>
           </div>
         </div>
         <div className={`flex justify-between my-4 p-5`}>
-          <Button href={link} className={`mr-2`}>
+          <Button href={link} className={``}>
             View
           </Button>
           {!saveBook ? (
@@ -50,7 +53,6 @@ function ResultCard({
             </Button>
           )}
         </div>
-       
       </div>
     </div>
   );

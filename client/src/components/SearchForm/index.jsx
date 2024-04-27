@@ -38,7 +38,7 @@ function SearchForm(props) {
           />
 
           <button
-            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-24 mt-2`}
+            className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded w-24 mt-2`}
             type="submit"
           >
             {loading ? <FaSpinner className={`animate-spin`} /> : "Search"}
@@ -47,7 +47,7 @@ function SearchForm(props) {
       </div>
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-200 opacity-75 flex justify-center items-center">
-          <FaSpinner className={`animate-spin`} />
+          <FaSpinner className={`animate-spin text-orange-500`} />
         </div>
       )}
     </>
