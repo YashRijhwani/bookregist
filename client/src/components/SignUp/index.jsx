@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Navbar from "../Navbar";
+import { validateEmail } from "../../utils/validateEmail";
+import { validatePassword } from "../../utils/passwordUtils";
 
 const SignUp = () => {
   // set initial form state
@@ -33,6 +35,19 @@ const SignUp = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    // Validate email format
+    try {
+      validateEmail(userFormData.email);
+    } catch (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    const isPasswordValid = validatePassword(userFormData.password);
+    if (!isPasswordValid) {
+      return;
+    }
+
     // check if passwords match
     if (userFormData.password !== userFormData.confirmPassword) {
       toast.error("Passwords do not match");
@@ -200,8 +215,8 @@ const SignUp = () => {
               )
             }
             type={`submit`}
-            className={`w-full bg-gray-500
-            hover:bg-gray-700 text-white rounded-md py-2 px-4 font-bold`}
+            className={`w-full bg-orange-500
+            hover:bg-orange-600 text-white cursor-pointer rounded-md py-2 px-4 font-bold`}
           >
             {loading ? "Signing up..." : "Sign Up"}
           </button>
