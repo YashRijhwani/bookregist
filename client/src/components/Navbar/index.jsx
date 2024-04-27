@@ -9,7 +9,6 @@ const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [userProfile, setUserProfile] = useState(null);
 
   const navigate = useNavigate();
 
@@ -60,28 +59,7 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const profile = await Auth.getProfile();
-        // console.log('User Profile:', profile);
-        if (!profile) {
-          toast.error("Token not available or expired, Please Login", {
-            autoClose: 500,
-          });
-          navigate("/login");
-        } else {
-          setUserProfile(profile.data);
-        }
-      } catch (error) {
-        console.error("Error retrieving user profile:", error);
-        // Handle error, e.g., redirect to login page
-        navigate("/login");
-      }
-    };
 
-    fetchUserProfile();
-  }, []);
 
   return (
     <div
@@ -104,12 +82,7 @@ const Navbar = () => {
       {/* Desktop View */}
       <ul
         className={`space-x-16 hidden md:flex md:justify-between items-center`}
-      >
-        {Auth.loggedIn() && userProfile && (
-          <li>
-            <p className="text-white">Hello {userProfile?.username}</p>
-          </li>
-        )}
+      >        
         {Auth.loggedIn() && ( // Check if the user is logged in
           <li>
             <Link
@@ -173,12 +146,7 @@ const Navbar = () => {
       {nav ? (
         <ul
           className={`flex flex-col justify-center items-center absolute top-0 left-0 w-full bg-[#3a6183] text-[#f4f4f4] my-20 z-50 md:hidden`}
-        >
-          {Auth.loggedIn() && userProfile && (
-            <li>
-              <p className="text-white">Hello {userProfile?.username}</p>
-            </li>
-          )}
+        >         
           {Auth.loggedIn() && (
             <Link
               to={`/savedbooks`}
