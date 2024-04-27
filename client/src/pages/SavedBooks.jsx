@@ -48,18 +48,17 @@ class Saved extends Component {
     return (
       <div>
         <Navbar />
-        <div className={`container`}>
-          <h3
-            className={`text-center text-2xl my-10 text-indigo-900`}
-          >
+        <div>
+          <h3 className={`text-center md:text-2xl mt-5 text-indigo-900`}>
             -- Your Saved Books --
-            <div className={`flex items-center justify-center rounded-full bg-blue-500 text-white w-10 h-10 mx-auto`}>
+            <div
+              className={`flex items-center justify-center rounded-full bg-blue-500 text-white md:w-10 w-7 md:h-10 h-7 mx-auto`}
+            >
               {savedBooksCount}
             </div>
           </h3>
 
           <div className={``}>
-
             {results.map((book) => {
               return (
                 <ResultCard
