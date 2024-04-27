@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import bookImage from "../../assets/images/bookTracker_img.png";
 import Auth from "../../utils/auth";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -47,11 +48,39 @@ const Navbar = () => {
     };
   }, [prevScrollPos]);
 
+  const handleClick = (anchor) => (event) => {
+    event.preventDefault();
+    const id = `${anchor}-section`;
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   useEffect(() => {
-    // Retrieve user profile information when the component mounts
-    const profile = Auth.getProfile();
-    console.log("User Profile:", profile);
-    setUserProfile(profile.data);
+    const fetchUserProfile = async () => {
+      try {
+        const profile = await Auth.getProfile();
+        // console.log('User Profile:', profile);
+        if (!profile) {
+          toast.error("Token not available or expired, Please Login", {
+            autoClose: 500,
+          });
+          navigate("/login");
+        } else {
+          setUserProfile(profile.data);
+        }
+      } catch (error) {
+        console.error("Error retrieving user profile:", error);
+        // Handle error, e.g., redirect to login page
+        navigate("/login");
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
   return (
@@ -91,19 +120,21 @@ const Navbar = () => {
             </Link>
           </li>
         )}
+        <li
+          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+        >
+          <a href="#blog" onClick={handleClick("blog")}>
+            Blog
+          </a>
+        </li>
+        <li
+          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+        >
+          <a href="#contact" onClick={handleClick("contact")}>
+            Contact
+          </a>
+        </li>
 
-        <Link
-          to={`/`}
-          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
-        >
-          Blog
-        </Link>
-        <Link
-          to={`/`}
-          className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
-        >
-          Contact
-        </Link>
         {Auth.loggedIn() && (
           <Link
             to={`/search`}
@@ -174,9 +205,25 @@ const Navbar = () => {
             </button>
           ) : (
             <>
+              <li
+                className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200 my-4`}
+                onClick={() => setNav(!nav)}
+              >
+                <a href="#blog" onClick={handleClick("blog")}>
+                  Blog
+                </a>
+              </li>
+              <li
+                className={`px-4 cursor-pointer capitalize font-medium text-[#f4f4f4] hover:text-[#d2d2d2] duration-200`}
+                onClick={() => setNav(!nav)}
+              >
+                <a href="#contact" onClick={handleClick("contact")}>
+                  Contact
+                </a>
+              </li>
               <Link
                 to={`/register`}
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline my-10`}
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5`}
               >
                 Get Started
               </Link>

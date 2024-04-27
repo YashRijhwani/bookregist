@@ -58,7 +58,7 @@ class Saved extends Component {
             </div>
           </h3>
 
-          <div className={`container mx-auto w-full`}>
+          <div className={``}>
 
             {results.map((book) => {
               return (

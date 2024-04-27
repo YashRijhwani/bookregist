@@ -4,13 +4,20 @@ import { jwtDecode } from "jwt-decode";
 // create a new class to instantiate for a user
 class AuthService {
   // get user data
-  getProfile() {
-    const token = this.getToken();
-    if (token) {
-      return jwtDecode(token);
-    } else {
-      return null;
-    }
+  async getProfile() {
+    return new Promise((resolve, reject) => {
+      const token = this.getToken();
+      if (token) {
+        try {
+          const profile = jwtDecode(token);
+          resolve(profile);
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        resolve(null);
+      }
+    });
   }
 
   // check if user's logged in

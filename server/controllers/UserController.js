@@ -1,5 +1,6 @@
 // import user model
 const User = require('../models/UserModel');
+const Contact = require('../models/ContactModel');
 // import sign token function from auth
 const { signToken } = require('../utils/auth');
 
@@ -41,6 +42,27 @@ module.exports = {
         }
         const token = signToken(user);
         res.json({ token, user });
+    },
+
+    async sendInquiry({ body }, res) {
+        try {
+            // Create a new instance of the Inquiry model with the inquiry data
+            const newInquiry = new Contact({
+                name: body.name,
+                email: body.email,
+                message: body.message,
+                // Add any other fields from the request body as needed
+            });
+
+            // Save the new inquiry to the database
+            await newInquiry.save();
+
+            // Send a success response
+            res.json({ message: 'Inquiry message saved successfully!' });
+        } catch (error) {
+            console.error("Inquiry submission failed:", error);
+            res.status(500).json({ message: 'Failed to save inquiry message to the database. Please try again.' });
+        }
     },
     // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
     // user comes from `req.user` created in the auth middleware function

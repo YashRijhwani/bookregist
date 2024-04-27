@@ -16,7 +16,7 @@ export const getMe = (token) => {
 export const createUser = (userData) => {
     return axios.post(
         `https://bookshelf-registry-backend-server.onrender.com/api/users`,
-        // 'http://localhost:3000/api/users', 
+        // 'http://localhost:3000/api/users',
         userData, {
         headers: {
             'Content-Type': 'application/json',
@@ -27,8 +27,20 @@ export const createUser = (userData) => {
 export const loginUser = (userData) => {
     return axios.post(
         `https://bookshelf-registry-backend-server.onrender.com/api/login`,
-        // 'http://localhost:3000/api/login', 
+        // 'http://localhost:3000/api/login',
         userData, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
+
+export const sendInquiry = (formData) => {
+    return axios.post(
+        `https://bookshelf-registry-backend-server.onrender.com/api/inquiry`,
+        // 'http://localhost:3000/api/inquiry',
+        formData, {
         headers: {
             'Content-Type': 'application/json',
         },
