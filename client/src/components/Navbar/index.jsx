@@ -231,7 +231,7 @@ const Navbar = () => {
               </li>
               <Link
                 to={`/register`}
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5`}
+                className={`bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5`}
               >
                 Get Started
               </Link>
