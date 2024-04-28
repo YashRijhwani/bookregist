@@ -19,7 +19,7 @@ const Hero = () => {
           className={`absolute inset-0 flex flex-col items-center justify-center`}
         >
           <h1
-            className={`text-4xl text-white font-bold capitalize text-center`}
+            className={`md:text-4xl text-xl text-white font-bold capitalize text-center`}
           >
             reading books becomes easier with bookilyx
           </h1>
